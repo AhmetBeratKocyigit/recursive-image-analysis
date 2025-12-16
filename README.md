@@ -7,7 +7,21 @@
 </p>
 
 ## Overview
-This project investigates the degradation and evolutionary patterns of digital images when subjected to recursive processing (save/load/process cycles). By iteratively processing an image and analyzing the results, we observe how digital information decays, stabilizes, or transforms over time.
+What happens when you ask a Generative AI to edit an image but tell it to **"change nothing"**?
+
+This project investigates the inherent biases, degradation patterns, and "hallucinations" of AI image generation models when subjected to a recursive loop with zero instructions. By feeding the output of one generation back as the input for the next—while explicitly commanding the AI to make no consistency changes—we reveal the underlying tendencies of the model.
+
+Does the image stay the same? Does it degrade into noise? Or does it evolve into something specific?
+
+You can download the full version of the dataset I used from [this link](https://drive.google.com/drive/folders/13KeW2_PczrjyBfnNsrJTQqgIK7yWnwF-?usp=sharing).
+
+## Methodology
+The experiment follows a strict recursive loop:
+1.  **Input:** Start with an initial seed image.
+2.  **Process:** Pass the image to an AI Image-to-Image generator.
+3.  **Prompt:** The prompt is systematically set to a null-instruction (e.g., "Change nothing", "Same image", "High quality").
+4.  **Loop:** The resulting output image becomes the *input* for the next iteration.
+5.  **Repeat:** This cycle is repeated 100+ times.
 
 ## Key Visualizations & Interpretation
 
@@ -15,46 +29,43 @@ This project investigates the degradation and evolutionary patterns of digital i
 ![SSIM Graph](graphs/ssim.png)
 
 **Interpretation:**
-The Structural Similarity Index (SSIM) measures the perceptual difference between two images.
-- **To Original (Blue):** Shows a sharp initial drop (~0.35), indicating that the first few iterations cause the most significant deviation from the source.
-- **To Previous (Orange):** Hovers around 0.90, suggesting that while the image is constantly changing, each step is relatively similar to the one before it. The system rapidly finds a "path" of degradation.
+*   **Rapid Divergence:** The sharp initial drop (~0.35) against the original image shows that the model *cannot* truly "change nothing." Even with a null prompt, it re-encodes and re-imagines the image significantly in the first few steps.
+*   **Local Stability:** The high "To Previous" score (~0.90) indicates the model is consistent in its drift. It doesn't make wild jumps; it slowly morphs the image, step-by-step, down a specific path.
 
 ### 2. Information Content (Entropy)
 ![Entropy Graph](graphs/entropy.png)
 
 **Interpretation:**
-Entropy quantifies the amount of "information" or randomness in the image.
-- We observe a **significant decrease** in entropy (from ~-200 to ~-1350).
-- This indicates a massive loss of detail and texture. The image is becoming "simpler"—likely smoothing out into large patches of uniform color, losing high-frequency noise and texture.
+*   **Simplification:** We observe a massive drop in entropy (from ~-200 to ~-1350).
+*   **Smoothing Effect:** The model acts like a low-pass filter over time. It removes high-frequency noise, complex textures, and subtle details, preferring smooth, uniform, and "clean" areas. The AI "hallucinates" simplicity where there was once complexity.
 
 ### 3. Edge Density
 ![Edges Graph](graphs/edges.png)
 
 **Interpretation:**
-This metric tracks the proportion of the image that contains edges (using a Sobel filter).
-- Tracking edge density confirms the entropy findings: as texture is lost, the number of detectable edges likely diminishes or stabilizes into a few strong contours, while subtle details vanish.
+*   **Loss of Detail:** Confirming the entropy data, the number of edges decreases. The image becomes less detailed and more abstract/cartoony as the recursion progresses.
 
-### 4. Color Drift
+### 4. Color Drift ("The Green Shift")
 ![Color Drift Graph](graphs/color_drift.png)
 
 **Interpretation:**
-We track the average Red, Green, and Blue channel intensities over iterations.
-- **Green Shift:** The Green channel intensity increases (92 $\to$ 114).
-- **Blue Loss:** The Blue channel intensity drops significantly (80 $\to$ 54).
-- **Red Stability:** The Red channel remains relatively stable.
-This suggests the recursive algorithm (or compression artifacts) has a bias that drives the color balance towards cooler, green-dominant tones while suppressing blue information.
+*   **The Model's Bias:** Without instruction, the model drifts towards specific parts of the color spectrum.
+    *   **Green:** Significantly increases ($92 \to 114$).
+    *   **Blue:** Significantly decreases ($80 \to 54$).
+*   **Conclusion:** This specific model/setting has a "cool/green" bias. When left to its own devices, it slowly tints the world green and removes blue, likely due to the training data distribution or compression artifacts being amplified.
 
 ### 5. SSCI (Stability-to-Change Index)
 ![SSCI Graph](graphs/ssci.png)
 
 **Interpretation:**
-This computed metric ($SSIM_{prev} / SSIM_{orig}$) represents the ratio of local stability to global drift. A rising trend would indicate that the image is stabilizing locally even as it drifts further from the original.
+*   This metric highlights that while the image drifts far from the original, it reaches a state of "stable decay," where the rate of change slows down as it settles into the model's preferred visual minima.
 
 ## Research Findings
-Based on the analysis of 100+ iterations:
-1.  **Convergence to Simplicity:** The system does not devolve into chaotic noise. Instead, it converges towards a simplified, lower-entropy state.
-2.  **The "Green-Shift" Phenomenon:** There is a deterministic drift in color space. The specific processing chain favors the preservation and amplification of Green channel information at the expense of Blue.
-3.  **Rapid Initial Decay:** The majority of "original" structural information is lost in the very first few generations. Subsequent changes are more gradual, "polishing" the artifacts introduced in the early steps.
+Based on 100+ recursive iterations, we conclude:
+
+1.  **AI Cannot "Do Nothing":** Generative models are incapable of a perfect identity function. They always "dream" a little bit, adding or subtracting details based on their training.
+2.  **Convergence to Simplicity:** The "hallucination" isn't chaotic; it's reductive. The model simplifies the world, removing noise and texture until only strong, simple shapes remain.
+3.  **Deterministic Drift:** The degradation is directional. The "Green Shift" proves that the model has a preferred color palette that it gravitates towards when unconstrained.
 
 ## Usage
 To replicate this analysis:
@@ -65,13 +76,12 @@ To replicate this analysis:
     ```
 
 2.  **Run Analysis:**
-    Execute the Python scripts to generate new data and graphs:
+    Execute the Python scripts to analyze your own image sequences:
     ```bash
     python analysis_ssim.py
     python analysis_entropy.py
     python analysis_color_drift.py
-    python analysis_edges.py
-    python analysis_ssci.py
+    # ...
     ```
 
 ## Structure

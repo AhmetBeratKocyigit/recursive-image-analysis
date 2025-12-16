@@ -1,6 +1,10 @@
 # Recursive Image Analysis Research
 
-![Project Banner](images/101.png)
+<p align="center">
+  <img src="images/000.png" width="30%" alt="First İmage" style="vertical-align: middle;"/>
+  <img src="https://www.pngall.com/wp-content/uploads/13/White-Arrow-PNG-Pic-300x161.png" width="30%" margin-bottom="30px" style="vertical-align: middle;"/>
+  <img src="images/101.png" width="30%" alt="Last İmage" style="vertical-align: middle;"/>
+</p>
 
 ## Overview
 This project investigates the degradation and evolutionary patterns of digital images when subjected to recursive processing (save/load/process cycles). By iteratively processing an image and analyzing the results, we observe how digital information decays, stabilizes, or transforms over time.
@@ -69,3 +73,4 @@ To replicate this analysis:
 - `images/`: Directory containing the recursive generation frames.
 - `graphs/`: Generated visualization plots.
 - `results/`: CSV data corresponding to the graphs.
+

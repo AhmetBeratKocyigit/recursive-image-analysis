@@ -13,6 +13,7 @@ This project investigates the degradation and evolutionary patterns of digital i
 
 ### 1. Structural Similarity (SSIM)
 ![SSIM Graph](graphs/ssim.png)
+
 **Interpretation:**
 The Structural Similarity Index (SSIM) measures the perceptual difference between two images.
 - **To Original (Blue):** Shows a sharp initial drop (~0.35), indicating that the first few iterations cause the most significant deviation from the source.
@@ -20,6 +21,7 @@ The Structural Similarity Index (SSIM) measures the perceptual difference betwee
 
 ### 2. Information Content (Entropy)
 ![Entropy Graph](graphs/entropy.png)
+
 **Interpretation:**
 Entropy quantifies the amount of "information" or randomness in the image.
 - We observe a **significant decrease** in entropy (from ~-200 to ~-1350).
@@ -27,12 +29,14 @@ Entropy quantifies the amount of "information" or randomness in the image.
 
 ### 3. Edge Density
 ![Edges Graph](graphs/edges.png)
+
 **Interpretation:**
 This metric tracks the proportion of the image that contains edges (using a Sobel filter).
 - Tracking edge density confirms the entropy findings: as texture is lost, the number of detectable edges likely diminishes or stabilizes into a few strong contours, while subtle details vanish.
 
 ### 4. Color Drift
 ![Color Drift Graph](graphs/color_drift.png)
+
 **Interpretation:**
 We track the average Red, Green, and Blue channel intensities over iterations.
 - **Green Shift:** The Green channel intensity increases (92 $\to$ 114).
@@ -42,6 +46,7 @@ This suggests the recursive algorithm (or compression artifacts) has a bias that
 
 ### 5. SSCI (Stability-to-Change Index)
 ![SSCI Graph](graphs/ssci.png)
+
 **Interpretation:**
 This computed metric ($SSIM_{prev} / SSIM_{orig}$) represents the ratio of local stability to global drift. A rising trend would indicate that the image is stabilizing locally even as it drifts further from the original.
 
@@ -73,4 +78,5 @@ To replicate this analysis:
 - `images/`: Directory containing the recursive generation frames.
 - `graphs/`: Generated visualization plots.
 - `results/`: CSV data corresponding to the graphs.
+
 

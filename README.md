@@ -67,6 +67,20 @@ Based on 100+ recursive iterations, we conclude:
 2.  **Convergence to Simplicity:** The "hallucination" isn't chaotic; it's reductive. The model simplifies the world, removing noise and texture until only strong, simple shapes remain.
 3.  **Deterministic Drift:** The degradation is directional. The "Green Shift" proves that the model has a preferred color palette that it gravitates towards when unconstrained.
 
+## Discussion of Unexpected Findings
+The most crucial takeaway is that the model's degradation is directional and non-chaotic, contrary to what might be expected from a process involving cumulative "hallucination."
+
+### Convergence to Simplicity vs. Expected Noise
+Expected Result: A recursive loop, especially with subtle changes at each step, might be expected to compound noise, eventually leading to a completely unstructured, high-entropy, random noise field (similar to an image suffering from extreme JPEG re-compression).
+
+Actual Result: The model converges towards low entropy and low edge density. The "hallucination" is not the addition of random detail; it is the reductive process of simplification. The model actively removes the complexity present in the input image, favoring its own learned, simplified aesthetic. This suggests a powerful implicit regularization in the generative process that prioritizes "clean," abstract shapes over photographic texture.
+
+### Deterministic Color Bias
+Expected Result: If the model were truly "doing nothing," color channel means should remain stable, or perhaps degrade uniformly.
+
+Actual Result: The observed "Green Shift" is highly directional and non-uniform. It proves that the model, when left to its own devices, has a preferred signature it imposes on the input. This is a critical finding for understanding and mitigating algorithmic bias, as it shows that the model's inherent "default" state is not neutral.
+   
+
 ## Usage
 To replicate this analysis:
 
@@ -88,5 +102,6 @@ To replicate this analysis:
 - `images/`: Directory containing the recursive generation frames.
 - `graphs/`: Generated visualization plots.
 - `results/`: CSV data corresponding to the graphs.
+
 
 
